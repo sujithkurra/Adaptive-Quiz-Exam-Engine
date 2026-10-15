@@ -18,25 +18,11 @@ public class AdaptiveQuizExamEngine {
 
             System.out.println("\nQuestion " + i + " (Difficulty: " + difficulty + ")");
 
-            int correctAnswer = 0;
+            int level = difficulty - 1;
+            int questionIndex = i - 1;
+            System.out.println(questions[level][questionIndex]);
+            int correctAnswer = answers[level][questionIndex];
             int userAnswer;
-            // EASY LEVEL
-            if (difficulty == 1) {
-                System.out.println("What is 2 + 3?");
-                correctAnswer = 5;
-            }
-
-            // MEDIUM LEVEL
-            else if (difficulty == 2) {
-                System.out.println("What is 12 * 2?");
-                correctAnswer = 24;
-            }
-
-            // HARD LEVEL
-            else {
-                System.out.println("What is 15 * 3 - 10?");
-                correctAnswer = 35;
-            }
 
             System.out.print("Enter your answer: ");
             while (!sc.hasNextInt()) {
@@ -83,4 +69,15 @@ public class AdaptiveQuizExamEngine {
 
     }
 }
+        String[][] questions = {
+            {"What is 2 + 3?", "What is 7 - 4?", "What is 6 + 8?", "What is 9 - 2?", "What is 4 + 6?"},
+            {"What is 12 * 2?", "What is 48 / 4?", "What is 9 * 3?", "What is 56 / 7?", "What is 11 * 4?"},
+            {"What is 15 * 3 - 10?", "What is 8 * 7 + 6?", "What is 100 / 4 + 17?", "What is 12 * 5 - 9?", "What is 9 * 9 - 16?"}
+        };
+        int[][] answers = {
+            {5, 3, 14, 7, 10},
+            {24, 12, 27, 8, 44},
+            {35, 62, 42, 51, 65}
+        };
+
 
