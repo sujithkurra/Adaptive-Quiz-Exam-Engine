@@ -21,6 +21,17 @@ public class AdaptiveQuizExamEngine {
          sec = sc.nextLine().trim();
      }
         
+        String[][] questions = {
+            {"What is 2 + 3?", "What is 7 - 4?", "What is 6 + 8?", "What is 9 - 2?", "What is 4 + 6?"},
+            {"What is 12 * 2?", "What is 48 / 4?", "What is 9 * 3?", "What is 56 / 7?", "What is 11 * 4?"},
+            {"What is 15 * 3 - 10?", "What is 8 * 7 + 6?", "What is 100 / 4 + 17?", "What is 12 * 5 - 9?", "What is 9 * 9 - 16?"}
+        };
+        int[][] answers = {
+            {5, 3, 14, 7, 10},
+            {24, 12, 27, 8, 44},
+            {35, 62, 42, 51, 65}
+        };
+
      int score = 0;
         int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
         int[] correctByLevel = new int[3];
@@ -93,15 +104,3 @@ public class AdaptiveQuizExamEngine {
 
     }
 }
-        String[][] questions = {
-            {"What is 2 + 3?", "What is 7 - 4?", "What is 6 + 8?", "What is 9 - 2?", "What is 4 + 6?"},
-            {"What is 12 * 2?", "What is 48 / 4?", "What is 9 * 3?", "What is 56 / 7?", "What is 11 * 4?"},
-            {"What is 15 * 3 - 10?", "What is 8 * 7 + 6?", "What is 100 / 4 + 17?", "What is 12 * 5 - 9?", "What is 9 * 9 - 16?"}
-        };
-        int[][] answers = {
-            {5, 3, 14, 7, 10},
-            {24, 12, 27, 8, 44},
-            {35, 62, 42, 51, 65}
-        };
-
-
