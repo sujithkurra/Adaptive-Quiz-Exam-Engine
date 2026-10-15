@@ -3,11 +3,11 @@ public class AdaptiveQuizExamEngine {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
      System.out.println("Enter your name: ");
-     String name = sc.next();
+     String name = sc.nextLine().trim();
      System.out.println("Enter your roll number: ");
-     long rollno = sc.nextLong();
+     String rollno = sc.nextLine().trim();
      System.out.println("Enter your section: ");
-     int sec = sc.nextInt();
+     String sec = sc.nextLine().trim();
         
      int score = 0;
         int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
@@ -39,6 +39,10 @@ public class AdaptiveQuizExamEngine {
             }
 
             System.out.print("Enter your answer: ");
+            while (!sc.hasNextInt()) {
+                System.out.print("Please enter a number: ");
+                sc.next();
+            }
             userAnswer = sc.nextInt();
 
             // CHECK ANSWER
@@ -66,6 +70,8 @@ public class AdaptiveQuizExamEngine {
         System.out.println("Roll No: " + rollno);
         System.out.println("Section: " + sec);
         System.out.println("Your Score: " + score + "/5");
+
+        System.out.println("Percentage: " + (score * 100 / 5) + "%");
 
         if (score >= 4) {
             System.out.println("Excellent Performance!");
