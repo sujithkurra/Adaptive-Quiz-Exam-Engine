@@ -4,10 +4,10 @@ A basic console-based Java quiz project for Problem Solving using Programming (J
 
 ## Features
 - Student name, roll number, and section entry
-- Five arithmetic quiz questions
+- Five arithmetic quiz questions selected from an easy, medium, and hard question bank
 - Adaptive difficulty: correct answers increase difficulty; wrong answers decrease it
-- Final score, percentage, and performance feedback
-- Numeric-answer input validation
+- Final score, percentage, performance feedback, and difficulty-wise breakdown
+- Numeric-answer input validation and required student details
 
 ## Requirements
 Java JDK 17 or later.
@@ -32,3 +32,15 @@ The quiz starts at EASY. Correct answers increase difficulty (up to HARD); incor
 
 ## Java concepts
 Scanner, variables, conditionals, loops, strings, and input validation. More advanced course outcomes such as object-oriented design, file handling, and collections are not yet implemented in this basic version.
+
+## Example quiz flow
+1. Enter your name, roll number, and section.
+2. Answer each arithmetic question using a number.
+3. Correct answers increase the next question's difficulty; wrong answers decrease it.
+4. Review the final score and performance at each difficulty level.
+
+## Expo demonstration tips
+- Show a correct answer to demonstrate the difficulty increasing.
+- Show a wrong answer to demonstrate the difficulty decreasing.
+- Show the results with the student's roll number.
+- Open the GitHub **Commits** tab and explain each genuine change.
