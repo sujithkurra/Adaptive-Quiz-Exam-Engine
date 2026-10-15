@@ -36,6 +36,8 @@ public class AdaptiveQuizExamEngine {
         int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
         int[] correctByLevel = new int[3];
         int[] askedByLevel = new int[3];
+        int streak = 0;
+        int bestStreak = 0;
 
         System.out.println("=== Adaptive Quiz Exam Engine ===");
 
@@ -62,6 +64,8 @@ public class AdaptiveQuizExamEngine {
                 System.out.println("Correct!");
                 score++;
                 correctByLevel[level]++;
+                streak++;
+                if (streak > bestStreak) bestStreak = streak;
 
                 // Increase difficulty
                 if (difficulty < 3) {
@@ -69,6 +73,7 @@ public class AdaptiveQuizExamEngine {
                 }
             } else {
                 System.out.println("Wrong! Correct answer is: " + correctAnswer);
+                streak = 0;
 
                 // Decrease difficulty
                 if (difficulty > 1) {
@@ -85,6 +90,7 @@ public class AdaptiveQuizExamEngine {
         System.out.println("Your Score: " + score + "/5");
 
         System.out.println("Percentage: " + (score * 100 / 5) + "%");
+        System.out.println("Longest correct streak: " + bestStreak);
 
         String[] levelNames = {"Easy", "Medium", "Hard"};
         System.out.println("Performance by difficulty:");
