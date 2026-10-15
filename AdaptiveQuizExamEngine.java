@@ -4,10 +4,22 @@ public class AdaptiveQuizExamEngine {
         Scanner sc = new Scanner(System.in);
      System.out.println("Enter your name: ");
      String name = sc.nextLine().trim();
+     while (name.isEmpty()) {
+         System.out.print("Name cannot be empty. Enter your name: ");
+         name = sc.nextLine().trim();
+     }
      System.out.println("Enter your roll number: ");
      String rollno = sc.nextLine().trim();
+     while (rollno.isEmpty()) {
+         System.out.print("Roll number cannot be empty. Enter roll number: ");
+         rollno = sc.nextLine().trim();
+     }
      System.out.println("Enter your section: ");
      String sec = sc.nextLine().trim();
+     while (sec.isEmpty()) {
+         System.out.print("Section cannot be empty. Enter section: ");
+         sec = sc.nextLine().trim();
+     }
         
      int score = 0;
         int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
@@ -77,6 +89,7 @@ public class AdaptiveQuizExamEngine {
         } else {
             System.out.println("Need more practice!");
         }
+        sc.close();
 
     }
 }
