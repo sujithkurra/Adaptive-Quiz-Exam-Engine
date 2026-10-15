@@ -38,6 +38,8 @@ public class AdaptiveQuizExamEngine {
         int[] askedByLevel = new int[3];
         int streak = 0;
         int bestStreak = 0;
+        int[] questionLevels = new int[5];
+        String[] askedQuestions = new String[5];
         int[] studentAnswers = new int[5];
         int[] correctAnswers = new int[5];
         boolean[] answerResults = new boolean[5];
@@ -52,6 +54,8 @@ public class AdaptiveQuizExamEngine {
             askedByLevel[level]++;
             int questionIndex = i - 1;
             System.out.println(questions[level][questionIndex]);
+            questionLevels[i - 1] = level;
+            askedQuestions[i - 1] = questions[level][questionIndex];
             int correctAnswer = answers[level][questionIndex];
             int userAnswer;
 
@@ -111,7 +115,8 @@ public class AdaptiveQuizExamEngine {
 
         System.out.println("Answer review:");
         for (int i = 0; i < 5; i++) {
-            System.out.println("Q" + (i + 1) + ": Your answer = " + studentAnswers[i]
+            System.out.println("Q" + (i + 1) + " [" + levelNames[questionLevels[i]] + "] "
+                    + askedQuestions[i] + ": Your answer = " + studentAnswers[i]
                     + ", Correct = " + correctAnswers[i]
                     + (answerResults[i] ? " (Correct)" : " (Wrong)"));
         }
