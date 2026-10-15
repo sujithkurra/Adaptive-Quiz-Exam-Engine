@@ -36,7 +36,6 @@ public class AdaptiveQuizExamEngine {
             else {
                 System.out.println("What is 15 * 3 - 10?");
                 correctAnswer = 35;
-                break;
             }
 
             System.out.print("Enter your answer: ");
