@@ -38,6 +38,9 @@ public class AdaptiveQuizExamEngine {
         int[] askedByLevel = new int[3];
         int streak = 0;
         int bestStreak = 0;
+        int[] studentAnswers = new int[5];
+        int[] correctAnswers = new int[5];
+        boolean[] answerResults = new boolean[5];
 
         System.out.println("=== Adaptive Quiz Exam Engine ===");
 
@@ -58,6 +61,9 @@ public class AdaptiveQuizExamEngine {
                 sc.next();
             }
             userAnswer = sc.nextInt();
+            studentAnswers[i - 1] = userAnswer;
+            correctAnswers[i - 1] = correctAnswer;
+            answerResults[i - 1] = userAnswer == correctAnswer;
 
             // CHECK ANSWER
             if (userAnswer == correctAnswer) {
@@ -97,6 +103,13 @@ public class AdaptiveQuizExamEngine {
         for (int level = 0; level < 3; level++) {
             System.out.println(levelNames[level] + ": " + correctByLevel[level]
                     + "/" + askedByLevel[level] + " correct");
+        }
+
+        System.out.println("Answer review:");
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Q" + (i + 1) + ": Your answer = " + studentAnswers[i]
+                    + ", Correct = " + correctAnswers[i]
+                    + (answerResults[i] ? " (Correct)" : " (Wrong)"));
         }
 
         if (score >= 4) {
