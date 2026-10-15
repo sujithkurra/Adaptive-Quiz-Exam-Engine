@@ -11,6 +11,8 @@ public class AdaptiveQuizExamEngine {
         
      int score = 0;
         int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
+        int[] correctByLevel = new int[3];
+        int[] askedByLevel = new int[3];
 
         System.out.println("=== Adaptive Quiz Exam Engine ===");
 
@@ -19,6 +21,7 @@ public class AdaptiveQuizExamEngine {
             System.out.println("\nQuestion " + i + " (Difficulty: " + difficulty + ")");
 
             int level = difficulty - 1;
+            askedByLevel[level]++;
             int questionIndex = i - 1;
             System.out.println(questions[level][questionIndex]);
             int correctAnswer = answers[level][questionIndex];
@@ -35,6 +38,7 @@ public class AdaptiveQuizExamEngine {
             if (userAnswer == correctAnswer) {
                 System.out.println("Correct!");
                 score++;
+                correctByLevel[level]++;
 
                 // Increase difficulty
                 if (difficulty < 3) {
@@ -58,6 +62,13 @@ public class AdaptiveQuizExamEngine {
         System.out.println("Your Score: " + score + "/5");
 
         System.out.println("Percentage: " + (score * 100 / 5) + "%");
+
+        String[] levelNames = {"Easy", "Medium", "Hard"};
+        System.out.println("Performance by difficulty:");
+        for (int level = 0; level < 3; level++) {
+            System.out.println(levelNames[level] + ": " + correctByLevel[level]
+                    + "/" + askedByLevel[level] + " correct");
+        }
 
         if (score >= 4) {
             System.out.println("Excellent Performance!");
