@@ -6,7 +6,8 @@ A basic console-based Java quiz project for Problem Solving using Programming (J
 - Student name, roll number, and section entry
 - Five arithmetic quiz questions selected from an easy, medium, and hard question bank
 - Adaptive difficulty: correct answers increase difficulty; wrong answers decrease it
-- Final score, percentage, performance feedback, and difficulty-wise breakdown
+- Final score, percentage, performance feedback, difficulty-wise breakdown, and longest correct streak
+- Question-by-question answer review
 - Numeric-answer input validation and required student details
 
 ## Requirements
@@ -44,3 +45,6 @@ Scanner, variables, conditionals, loops, strings, and input validation. More adv
 - Show a wrong answer to demonstrate the difficulty decreasing.
 - Show the results with the student's roll number.
 - Open the GitHub **Commits** tab and explain each genuine change.
+
+## Recent improvements
+The question bank is declared inside the Java `main` method. The results now include the longest consecutive correct-answer streak and a review of each submitted answer.
