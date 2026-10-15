@@ -1,0 +1,12 @@
+# Java compiler output
+*.class
+
+# IDE settings
+.idea/
+.vscode/
+
+# macOS metadata
+.DS_Store
+
+# Local run logs
+*.log
