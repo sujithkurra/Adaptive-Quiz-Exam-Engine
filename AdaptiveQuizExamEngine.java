@@ -56,11 +56,15 @@ public class AdaptiveQuizExamEngine {
             int userAnswer;
 
             System.out.print("Enter your answer: ");
-            while (!sc.hasNextInt()) {
-                System.out.print("Please enter a number: ");
-                sc.next();
+            while (true) {
+                String input = sc.nextLine().trim();
+                try {
+                    userAnswer = Integer.parseInt(input);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.print("Invalid number. Please try again: ");
+                }
             }
-            userAnswer = sc.nextInt();
             studentAnswers[i - 1] = userAnswer;
             correctAnswers[i - 1] = correctAnswer;
             answerResults[i - 1] = userAnswer == correctAnswer;
