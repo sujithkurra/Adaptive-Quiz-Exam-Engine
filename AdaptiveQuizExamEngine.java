@@ -105,6 +105,7 @@ public class AdaptiveQuizExamEngine {
 
         System.out.println("Percentage: " + (score * 100 / 5) + "%");
         System.out.println("Longest correct streak: " + bestStreak);
+        System.out.println("Final difficulty: " + (difficulty == 1 ? "Easy" : difficulty == 2 ? "Medium" : "Hard"));
 
         String[] levelNames = {"Easy", "Medium", "Hard"};
         System.out.println("Performance by difficulty:");
@@ -121,7 +122,9 @@ public class AdaptiveQuizExamEngine {
                     + (answerResults[i] ? " (Correct)" : " (Wrong)"));
         }
 
-        if (score >= 4) {
+        if (score == 5) {
+            System.out.println("Perfect score! Great work!");
+        } else if (score >= 4) {
             System.out.println("Excellent Performance!");
         } else if (score >= 2) {
             System.out.println("Good, but you can improve!");
