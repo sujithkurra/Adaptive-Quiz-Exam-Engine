@@ -10,3 +10,6 @@
 
 # Local run logs
 *.log
+
+# Generated quiz results (student data)
+data/results.csv
