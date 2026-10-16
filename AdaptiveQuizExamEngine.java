@@ -12,142 +12,159 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.io.IOException;
 public class AdaptiveQuizExamEngine {
+    private static final Path RESULTS = Path.of("data", "results.csv");
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        List<QuizQuestion> questionBank = QuizQuestion.loadBank();
-        System.out.println("Loaded " + questionBank.size() + " MCQ questions.");
-     System.out.println("Enter your name: ");
-     String name = sc.nextLine().trim();
-     while (name.isEmpty()) {
-         System.out.print("Name cannot be empty. Enter your name: ");
-         name = sc.nextLine().trim();
-     }
-     System.out.println("Enter your roll number: ");
-     String rollno = sc.nextLine().trim();
-     while (rollno.isEmpty()) {
-         System.out.print("Roll number cannot be empty. Enter roll number: ");
-         rollno = sc.nextLine().trim();
-     }
-     System.out.println("Enter your section: ");
-     String sec = sc.nextLine().trim();
-     while (sec.isEmpty()) {
-         System.out.print("Section cannot be empty. Enter section: ");
-         sec = sc.nextLine().trim();
-     }
-        
-        String[][] questions = {
-            {"What is 2 + 3?", "What is 7 - 4?", "What is 6 + 8?", "What is 9 - 2?", "What is 4 + 6?"},
-            {"What is 12 * 2?", "What is 48 / 4?", "What is 9 * 3?", "What is 56 / 7?", "What is 11 * 4?"},
-            {"What is 15 * 3 - 10?", "What is 8 * 7 + 6?", "What is 100 / 4 + 17?", "What is 12 * 5 - 9?", "What is 9 * 9 - 16?"}
-        };
-        int[][] answers = {
-            {5, 3, 14, 7, 10},
-            {24, 12, 27, 8, 44},
-            {35, 62, 42, 51, 65}
-        };
-
-     int score = 0;
-        int difficulty = 1; // 1 = Easy, 2 = Medium, 3 = Hard
-        int[] correctByLevel = new int[3];
-        int[] askedByLevel = new int[3];
-        int streak = 0;
-        int bestStreak = 0;
-        int[] questionLevels = new int[5];
-        String[] askedQuestions = new String[5];
-        int[] studentAnswers = new int[5];
-        int[] correctAnswers = new int[5];
-        boolean[] answerResults = new boolean[5];
-
-        System.out.println("=== Adaptive Quiz Exam Engine ===");
-
-        for (int i = 1; i <= 5; i++) {
-
-            System.out.println("\nQuestion " + i + " (Difficulty: " + difficulty + ")");
-
-            int level = difficulty - 1;
-            askedByLevel[level]++;
-            int questionIndex = i - 1;
-            System.out.println(questions[level][questionIndex]);
-            questionLevels[i - 1] = level;
-            askedQuestions[i - 1] = questions[level][questionIndex];
-            int correctAnswer = answers[level][questionIndex];
-            int userAnswer;
-
-            System.out.print("Enter your answer: ");
+        try (Scanner sc = new Scanner(System.in)) {
+            List<QuizQuestion> bank = QuizQuestion.loadBank();
+            if (bank.isEmpty()) bank = fallbackQuestions();
+            System.out.println("=== Adaptive Quiz & Exam Engine ===");
+            String name = required(sc, "Name: ");
+            String roll = required(sc, "Roll number: ");
+            String section = required(sc, "Section: ");
+            System.out.println("Welcome " + name + " (" + section + ")");
             while (true) {
-                String input = sc.nextLine().trim();
-                try {
-                    userAnswer = Integer.parseInt(input);
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.print("Invalid number. Please try again: ");
-                }
-            }
-            studentAnswers[i - 1] = userAnswer;
-            correctAnswers[i - 1] = correctAnswer;
-            answerResults[i - 1] = userAnswer == correctAnswer;
-
-            // CHECK ANSWER
-            if (userAnswer == correctAnswer) {
-                System.out.println("Correct!");
-                score++;
-                correctByLevel[level]++;
-                streak++;
-                if (streak > bestStreak) bestStreak = streak;
-
-                // Increase difficulty
-                if (difficulty < 3) {
-                    difficulty++;
-                }
-            } else {
-                System.out.println("Wrong! Correct answer is: " + correctAnswer);
-                streak = 0;
-
-                // Decrease difficulty
-                if (difficulty > 1) {
-                    difficulty--;
+                System.out.println("\n1. Adaptive quiz  2. Exam mode  3. Leaderboard  4. Question bank  5. Exit");
+                int choice = readInt(sc, "Choose: ", 1, 5);
+                switch (choice) {
+                    case 1 -> runQuiz(sc, bank, name, roll, true);
+                    case 2 -> runQuiz(sc, bank, name, roll, false);
+                    case 3 -> leaderboard();
+                    case 4 -> bankSummary(bank);
+                    case 5 -> { System.out.println("Goodbye!"); return; }
                 }
             }
         }
-
-        // FINAL RESULT
-        System.out.println("\n=== Exam Finished ===");
-        System.out.println("Name: " + name);
-        System.out.println("Roll No: " + rollno);
-        System.out.println("Section: " + sec);
-        System.out.println("Your Score: " + score + "/5");
-
-        System.out.println("Percentage: " + (score * 100 / 5) + "%");
-        System.out.println("Longest correct streak: " + bestStreak);
-        System.out.println("Recursive total correct: " + recursiveTotal(correctByLevel, 0));
-        System.out.println("Final difficulty: " + (difficulty == 1 ? "Easy" : difficulty == 2 ? "Medium" : "Hard"));
-
-        String[] levelNames = {"Easy", "Medium", "Hard"};
-        System.out.println("Performance by difficulty:");
-        for (int level = 0; level < 3; level++) {
-            System.out.println(levelNames[level] + ": " + correctByLevel[level]
-                    + "/" + askedByLevel[level] + " correct");
+    }
+    static String required(Scanner sc, String label) {
+        while (true) {
+            System.out.print(label);
+            String s = sc.nextLine().trim();
+            if (!s.isEmpty()) return s;
+            System.out.println("Cannot be blank.");
         }
-
-        System.out.println("Answer review:");
+    }
+    static int readInt(Scanner sc, String label, int min, int max) {
+        while (true) {
+            System.out.print(label);
+            try {
+                int n = Integer.parseInt(sc.nextLine().trim());
+                if (n >= min && n <= max) return n;
+            } catch (NumberFormatException ignored) { }
+            System.out.println("Enter a number between " + min + " and " + max + ".");
+        }
+    }
+    static void runQuiz(Scanner sc, List<QuizQuestion> bank, String name, String roll, boolean adaptive) {
+        int level = adaptive ? 0 : 1;
+        int correctStreak = 0, wrongStreak = 0, score = 0;
+        int[][] matrix = new int[3][2];
+        Set<QuizQuestion> used = new HashSet<>();
+        Map<String, Integer> topicScores = new HashMap<>();
         for (int i = 0; i < 5; i++) {
-            System.out.println("Q" + (i + 1) + " [" + levelNames[questionLevels[i]] + "] "
-                    + askedQuestions[i] + ": Your answer = " + studentAnswers[i]
-                    + ", Correct = " + correctAnswers[i]
-                    + (answerResults[i] ? " (Correct)" : " (Wrong)"));
+            QuizQuestion q = chooseQuestion(bank, used, level);
+            if (q == null) break;
+            used.add(q);
+            System.out.println("\nQuestion " + (i + 1) + " (Level " + (q.difficulty() + 1) + ")");
+            q.show();
+            int answer = readInt(sc, "Answer (1-4): ", 1, 4);
+            boolean correct = q.isCorrect(answer);
+            matrix[q.difficulty()][correct ? 0 : 1]++;
+            if (correct) {
+                score++;
+                correctStreak++;
+                wrongStreak = 0;
+                topicScores.merge(q.topic(), 1, Integer::sum);
+                System.out.println("Correct!");
+            } else {
+                wrongStreak++;
+                correctStreak = 0;
+                System.out.println("Wrong. Correct option: " + q.correctOption);
+            }
+            if (adaptive && correctStreak == 2) {
+                level = Math.min(2, level + 1);
+                correctStreak = 0;
+            } else if (adaptive && wrongStreak == 2) {
+                level = Math.max(0, level - 1);
+                wrongStreak = 0;
+            }
         }
-
-        if (score == 5) {
-            System.out.println("Perfect score! Great work!");
-        } else if (score >= 4) {
-            System.out.println("Excellent Performance!");
-        } else if (score >= 2) {
-            System.out.println("Good, but you can improve!");
-        } else {
-            System.out.println("Need more practice!");
+        int total = used.size();
+        System.out.printf("Score: %d/%d (%.1f%%)%n", score, total,
+                total == 0 ? 0 : score * 100.0 / total);
+        System.out.println("Correct answers by topic: " + topicScores);
+        System.out.println("Recursive score check: " + recursiveTotal(
+                new int[]{matrix[0][0], matrix[1][0], matrix[2][0]}, 0));
+        for (int i = 0; i < 3; i++)
+            System.out.printf("Level %d: %d correct, %d wrong%n", i + 1, matrix[i][0], matrix[i][1]);
+        save(new QuizResult(name, roll, score, total, adaptive ? "ADAPTIVE" : "EXAM"));
+    }
+    static QuizQuestion chooseQuestion(List<QuizQuestion> bank, Set<QuizQuestion> used, int level) {
+        for (int distance = 0; distance < 3; distance++)
+            for (QuizQuestion q : bank)
+                if (!used.contains(q) && Math.abs(q.difficulty() - level) == distance) return q;
+        return null;
+    }
+    static List<QuizQuestion> fallbackQuestions() {
+        List<QuizQuestion> bank = new ArrayList<>();
+        bank.add(new QuizQuestion("Java", 0, "Which keyword defines a class?",
+                new String[]{"class", "new", "void", "import"}, 1));
+        bank.add(new QuizQuestion("Math", 0, "What is 2 + 3?",
+                new String[]{"4", "5", "6", "7"}, 2));
+        bank.add(new QuizQuestion("Java", 1, "Which is a loop?",
+                new String[]{"switch", "while", "break", "return"}, 2));
+        bank.add(new QuizQuestion("Math", 1, "What is 12 * 2?",
+                new String[]{"22", "26", "24", "20"}, 3));
+        bank.add(new QuizQuestion("Java", 2, "Which collection prevents duplicates?",
+                new String[]{"List", "Set", "Map", "ArrayList"}, 2));
+        return bank;
+    }
+    static void bankSummary(List<QuizQuestion> bank) {
+        System.out.println("Total questions: " + bank.size());
+        for (int i = 0; i < 3; i++) {
+            final int level = i;
+            System.out.println("Level " + (i + 1) + ": " +
+                    bank.stream().filter(q -> q.difficulty() == level).count());
         }
-        sc.close();
-
+        System.out.println("Topics: " + bank.stream().collect(
+                Collectors.groupingBy(QuizQuestion::topic, Collectors.counting())));
+    }
+    static void save(QuizResult result) {
+        try {
+            Files.createDirectories(RESULTS.getParent());
+            if (!Files.exists(RESULTS))
+                Files.writeString(RESULTS, "name,roll,score,total,mode\n", StandardOpenOption.CREATE);
+            String name = result.name().replace(',', ' ').replace('\n', ' ');
+            String roll = result.roll().replace(',', ' ').replace('\n', ' ');
+            Files.writeString(RESULTS, name + "," + roll + "," + result.score() + "," +
+                    result.total() + "," + result.mode() + "\n", StandardOpenOption.APPEND);
+            System.out.println("Result saved.");
+        } catch (IOException e) {
+            System.out.println("Could not save result: " + e.getMessage());
+        }
+    }
+    static void leaderboard() {
+        if (!Files.exists(RESULTS)) {
+            System.out.println("No results yet.");
+            return;
+        }
+        try {
+            List<QuizResult> results = new ArrayList<>();
+            for (String line : Files.readAllLines(RESULTS).stream().skip(1).toList()) {
+                String[] p = line.split(",", -1);
+                if (p.length != 5) continue;
+                try {
+                    results.add(new QuizResult(p[0], p[1], Integer.parseInt(p[2]),
+                            Integer.parseInt(p[3]), p[4]));
+                } catch (NumberFormatException ignored) { }
+            }
+            results.stream().sorted(Comparator.comparingDouble((QuizResult r) ->
+                    r.total() == 0 ? 0 : (double) r.score() / r.total()).reversed())
+                    .limit(10).forEach(r -> System.out.printf("%s: %d/%d (%s)%n",
+                            r.name(), r.score(), r.total(), r.mode()));
+            System.out.printf("Average: %.1f%%%n", results.stream().mapToDouble(r ->
+                    r.total() == 0 ? 0 : r.score() * 100.0 / r.total()).average().orElse(0));
+        } catch (IOException e) {
+            System.out.println("Cannot read leaderboard: " + e.getMessage());
+        }
     }
 
     // CO4: interface, abstract class, inheritance, encapsulation, and records
