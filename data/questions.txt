@@ -1,0 +1,16 @@
+# topic|difficulty(0-2)|question|option1|option2|option3|option4|correct(1-4)
+Java|0|Which keyword declares a class?|class|new|void|static|1
+Math|0|What is 7 + 5?|10|11|12|13|3
+Java|0|Which method starts a Java program?|main|start|run|execute|1
+Math|0|What is 9 - 4?|3|4|5|6|3
+Java|0|Which type stores whole numbers?|double|int|boolean|char|2
+Math|1|What is 8 times 7?|48|54|56|64|3
+Java|1|Which loop runs while a condition is true?|switch|while|break|return|2
+Math|1|What is 81 divided by 9?|7|8|9|10|3
+Java|1|What is an array index of the first element?|0|1|-1|2|1
+Math|1|What is 15 times 3?|35|40|45|50|3
+Java|2|Which collection removes duplicates?|ArrayList|Set|List|Map|2
+Math|2|What is 12 times 5 minus 9?|49|51|53|55|2
+Java|2|Which keyword inherits a class?|extends|implements|imports|throws|1
+Math|2|What is 9 times 9 minus 16?|63|64|65|66|3
+Java|2|Which operation creates a stream from a list?|stream()|split()|trim()|parseInt()|1
