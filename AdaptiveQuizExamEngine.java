@@ -105,6 +105,7 @@ public class AdaptiveQuizExamEngine {
 
         System.out.println("Percentage: " + (score * 100 / 5) + "%");
         System.out.println("Longest correct streak: " + bestStreak);
+        System.out.println("Recursive total correct: " + recursiveTotal(correctByLevel, 0));
         System.out.println("Final difficulty: " + (difficulty == 1 ? "Easy" : difficulty == 2 ? "Medium" : "Hard"));
 
         String[] levelNames = {"Easy", "Medium", "Hard"};
@@ -133,5 +134,11 @@ public class AdaptiveQuizExamEngine {
         }
         sc.close();
 
+    }
+
+    // CO3: recursion and methods
+    static int recursiveTotal(int[] values, int index) {
+        if (index == values.length) return 0;
+        return values[index] + recursiveTotal(values, index + 1);
     }
 }
